@@ -1,0 +1,32 @@
+{
+    "name": "ibraheem-ghazi/laravel-settings-manager",
+    "description": "Laravel settings management package using database and laravel config()",
+    "keywords": ["php", "settings", "setting"],
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Ibraheem Ghazi"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0", 
+        "laravel/framework": ">=5.6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "IbraheemGhazi\\SettingsManager\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "IbraheemGhazi\\SettingsManager\\Providers\\SettingsServiceProvider"
+            ],
+			"aliases": {
+                "Settings": "IbraheemGhazi\\SettingsManager\\Facades\\Settings"
+            }
+        }
+    }
+}
