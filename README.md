@@ -6,7 +6,7 @@ This is a Laravel package provide an easy way to control application settings, w
 
 Compatibility
 ============
-This package was built for versions >= 7.0 but also compatible with versions >= 5.6
+This package was built for versions >= 7.0 but also compatible with versions >= 5.8.16
 
 Features
 ========
