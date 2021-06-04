@@ -34,8 +34,8 @@ class SettingsManager
     /** @var Collection|Model $cache */
     private $cache;
 
-	/** @var bool $ignoreMigration */
-	public static $ignoreMigration = false;
+    /** @var bool $ignoreMigration */
+    public static $ignoreMigration = false;
 
     public function __construct()
     {
@@ -154,7 +154,11 @@ class SettingsManager
     public function get($key, $default = NULL)
     {
         if ($entry = $this->getEntry($key)) {
-            return $entry->getAttribute('value');
+            try {
+                return json_decode($entry->getAttribute('value'));
+            } catch (\Exception $ex) {
+                return $entry->getAttribute('value');
+            }
         }
 //        if($this->applyBindingOnNonExists){
 //            $this->applyBindingOn($key, $default);
@@ -182,6 +186,7 @@ class SettingsManager
      */
     public function set($key, $value, $save = false, $should_create = true)
     {
+        $value = json_encode($value);
         if ($entry = $this->getEntry($key)) {
             $entry->setAttribute('value', $value);
             if (static::$autoSaveOnSet || $save) {
@@ -196,6 +201,7 @@ class SettingsManager
             if (static::$autoCreateOnSet || ($save && $should_create)) {
                 $entry->save();
             }
+            $this->cache->push($entry);
         });
 
         return $this;
