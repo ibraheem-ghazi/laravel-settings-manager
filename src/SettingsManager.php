@@ -155,7 +155,7 @@ class SettingsManager
     {
         if ($entry = $this->getEntry($key)) {
             try {
-                return json_decode($entry->getAttribute('value'));
+                return json_decode($entry->getAttribute('value'), true);
             } catch (\Exception $ex) {
                 return $entry->getAttribute('value');
             }
