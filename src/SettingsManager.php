@@ -186,7 +186,7 @@ class SettingsManager
      */
     public function set($key, $value, $save = false, $should_create = true)
     {
-        $value = json_encode($value);
+        $value = is_string($value) ? $value : json_encode($value, JSON_UNESCAPED_UNICODE);
         if ($entry = $this->getEntry($key)) {
             $entry->setAttribute('value', $value);
             if (static::$autoSaveOnSet || $save) {
