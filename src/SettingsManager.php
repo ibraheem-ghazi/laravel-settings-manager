@@ -115,7 +115,7 @@ class SettingsManager
     {
         if (is_string($key) && strlen($key) && array_key_exists($key, $this->configBindings)) {
             $config_key = $this->configBindings[$key];
-            config([$config_key => $value]);
+            config([$config_key => $this->tryDecodeValue($value)]);
         }
     }
 
@@ -154,16 +154,30 @@ class SettingsManager
     public function get($key, $default = NULL)
     {
         if ($entry = $this->getEntry($key)) {
-            try {
-                return json_decode($entry->getAttribute('value'), true);
-            } catch (\Exception $ex) {
-                return $entry->getAttribute('value');
-            }
+            return $this->tryDecodeValue( $entry->getAttribute('value') );
         }
 //        if($this->applyBindingOnNonExists){
 //            $this->applyBindingOn($key, $default);
 //        }
         return $default;
+    }
+
+    /**
+     * try to decode the input value, if it has any error
+     * while decoding it will return the input value.
+     * @param $value
+     * @return mixed
+     */
+    protected function tryDecodeValue($value){
+        try {
+            $temp = json_decode($value, true);
+            if(json_last_error() === JSON_ERROR_NONE){
+                return $temp;
+            }
+            return $value;
+        } catch (\Exception $ex) {
+            return $value;
+        }
     }
 
     /**
