@@ -104,6 +104,17 @@ class SettingsManager
     protected function applyBindingOnModel(Model $entry)
     {
         $this->applyBindingOn($this->getBinding($entry), $entry->getAttribute('value'));
+
+        /**
+         * the following code fix the dependency between bindings for example:
+         * Settings::bind('seo.site_name', 'app.name')
+         * will now work as expected and bind the app.name to seo.site_name
+         * so both will have same value
+         */
+        $value = config($this->getBinding($entry));
+        foreach ($this->getDependentBinding($entry) as $dep){
+                config([$dep=>$value]);
+        }
     }
 
     /**
@@ -122,6 +133,17 @@ class SettingsManager
     protected function getBinding(Model $entry)
     {
         return $this->configBindings[$entry->getAttribute('key')] ?? NULL;
+    }
+
+    protected function getDependentBinding(Model $entry)
+    {
+        $temp = [];
+        foreach ($this->configBindings as $k=>$v){
+            if($k !== $v && $v === $entry->getAttribute('key')){
+                $temp[] = $k;
+            }
+        }
+        return $temp;
     }
 
     /**
