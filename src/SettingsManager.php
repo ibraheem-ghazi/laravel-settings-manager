@@ -61,7 +61,7 @@ class SettingsManager
         $execute = function () use ($force) {
             if ($this->cache->isNotEmpty() && !$force) return;
             $this->cache = $this->getModel()->get();
-            $this-refreshBindings();
+            $this->refreshBindings();
         };
 
         /**
