@@ -61,9 +61,7 @@ class SettingsManager
         $execute = function () use ($force) {
             if ($this->cache->isNotEmpty() && !$force) return;
             $this->cache = $this->getModel()->get();
-            foreach ($this->cache as $entry) {
-                $this->applyBindingOnModel($entry);
-            }
+            $this-refreshBindings();
         };
 
         /**
@@ -76,6 +74,16 @@ class SettingsManager
             $execute();
         }
         return $this;
+    }
+    
+    /**
+     * force refresh the bindings to have its value
+     */
+    public function refreshBindings()
+    {
+        foreach ($this->cache as $entry) {
+            $this->applyBindingOnModel($entry);
+        }
     }
 
     /**
