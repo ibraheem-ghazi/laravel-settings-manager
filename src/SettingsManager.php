@@ -78,12 +78,14 @@ class SettingsManager
     
     /**
      * force refresh the bindings to have its value
+     * @return $this
      */
     public function refreshBindings()
     {
         foreach ($this->cache as $entry) {
             $this->applyBindingOnModel($entry);
         }
+        return $this;
     }
 
     /**
